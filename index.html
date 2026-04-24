@@ -2,229 +2,216 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>ERROR_SISTEMA_CRITICO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SISTEMA_CORRUPTO</title>
     <style>
         :root {
-            --raw-flesh: #4d0000;
-            --void: #020202;
+            --red: #600000;
+            --deep-black: #000000;
             --blood: #ff0000;
         }
 
+        * { cursor: none !important; } /* Elimina el cursor para quitar control */
+
         body, html {
             margin: 0; padding: 0;
-            height: 100%; width: 100%;
-            background-color: var(--void);
-            color: #555;
-            font-family: 'Courier New', monospace;
+            width: 100vw; height: 100vh;
+            background-color: var(--deep-black);
+            color: #444;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            -webkit-touch-callout: none;
+            user-select: none;
         }
 
-        /* EL DEMONIO: Una masa de carne y sombras que parece "palpitar" */
-        #demon-flesh {
+        /* EL DEMONIO: Una masa visceral que respira detrás del texto */
+        #demon-entity {
             position: absolute;
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, #1a0000 0%, #000 80%);
-            filter: blur(40px);
-            opacity: 0.7;
+            width: 120%; height: 120%;
+            background: radial-gradient(circle, #0f0000 0%, #000 60%);
             z-index: 1;
-            animation: pulse 0.05s infinite; /* Vibración imperceptible que genera malestar */
+            filter: blur(60px);
+            animation: panic 0.1s infinite alternate;
+            opacity: 0.8;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1) translate(0,0); opacity: 0.7; }
-            50% { transform: scale(1.02) translate(1px, -1px); opacity: 0.8; }
-            100% { transform: scale(1) translate(-1px, 1px); opacity: 0.7; }
+        @keyframes panic {
+            0% { transform: scale(1) translate(0,0); }
+            100% { transform: scale(1.05) translate(3px, -3px); filter: blur(40px) contrast(2); }
         }
 
-        /* Ojos que no deberían estar ahí */
-        .eye-socket {
+        /* Ojo central que parpadea según el movimiento */
+        #watcher {
             position: absolute;
-            width: 25px;
-            height: 15px;
-            background: white;
+            width: 100px; height: 5px;
+            background: var(--blood);
             border-radius: 50%;
-            box-shadow: 0 0 15px red;
-            display: none; /* Aparecen por JS */
             z-index: 2;
-            filter: contrast(2);
+            filter: blur(10px);
+            box-shadow: 0 0 40px var(--blood);
+            opacity: 0;
+            transition: opacity 0.5s;
         }
 
-        .pupil {
-            width: 8px;
-            height: 8px;
-            background: black;
-            border-radius: 50%;
-            margin: 3px auto;
-        }
-
-        /* EL CONTRATO: Estilo documento corrupto */
-        #ui-wrapper {
+        /* Interfaz del Contrato */
+        #manifest {
             position: relative;
-            z-index: 100;
-            background: rgba(0,0,0,0.98);
-            border: 1px solid #220000;
-            padding: 40px;
+            z-index: 10;
+            width: 85%;
             max-width: 400px;
             text-align: center;
-            box-shadow: 0 0 100px rgba(255,0,0,0.1);
+            padding: 20px;
+            background: rgba(0,0,0,0.9);
+            border: 1px solid #111;
         }
 
         h1 {
-            font-size: 0.9rem;
+            font-size: 1rem;
             letter-spacing: 15px;
-            color: var(--raw-flesh);
-            margin-bottom: 50px;
-            animation: text-glitch 0.2s infinite;
+            color: var(--red);
+            margin-bottom: 30px;
+            text-transform: uppercase;
         }
 
-        @keyframes text-glitch {
-            0% { opacity: 1; transform: skew(0deg); }
-            20% { opacity: 0.5; transform: skew(10deg); }
-            21% { opacity: 1; transform: skew(0deg); }
-            100% { opacity: 1; }
-        }
-
-        .clause {
+        .paragraph {
             font-size: 0.8rem;
-            color: #444;
-            margin: 15px 0;
-            line-height: 1.4;
-            text-align: justify;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            color: #555;
+            transition: color 0.3s;
         }
 
-        .warning {
+        .crucial {
             color: var(--blood);
             font-weight: bold;
-            font-size: 1.1rem;
+            display: block;
             margin: 20px 0;
-            text-decoration: underline;
+            letter-spacing: 2px;
         }
 
-        .btn-container {
-            margin-top: 50px;
+        .controls {
             display: flex;
             flex-direction: column;
             gap: 15px;
+            margin-top: 40px;
         }
 
         button {
-            background: black;
-            border: 1px solid #1a0000;
+            background: transparent;
+            border: 1px solid #222;
             color: #333;
-            padding: 10px;
-            cursor: pointer;
+            padding: 15px;
             font-family: inherit;
-            transition: all 0.1s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            transition: 0.1s;
         }
 
-        button:hover {
-            color: white;
-            border-color: red;
-            background: #400;
+        button:active, button:hover {
+            border-color: var(--blood);
+            color: var(--blood);
+            background: #050000;
         }
 
-        /* EFECTO "RETORCERSE" (CONVULSIÓN TOTAL) */
-        .agony {
-            animation: violent-shake 0.1s infinite !important;
-            filter: invert(1) grayscale(1) contrast(5) !important;
+        /* EFECTO PSICOLÓGICO: RETORCERSE */
+        .convulsion {
+            animation: violent 0.05s infinite !important;
         }
 
-        @keyframes violent-shake {
-            0% { transform: translate(5px, 5px) scale(3); }
-            50% { transform: translate(-10px, 10px) scale(3.5); }
-            100% { transform: translate(10px, -5px) scale(3); }
+        @keyframes violent {
+            0% { filter: invert(1) contrast(10); transform: translate(5px, 5px); }
+            50% { filter: invert(0) contrast(1); transform: translate(-5px, -5px); }
+            100% { filter: invert(1) contrast(10); transform: translate(0, 0); }
         }
 
-        .vignette {
+        /* Pantalla de carga falsa inicial */
+        #noise {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 20%, black 100%);
+            background: url('https://media.giphy.com/media/oEI9uWUPr9WUM/giphy.gif');
+            opacity: 0.03;
+            z-index: 1000;
             pointer-events: none;
-            z-index: 200;
         }
     </style>
 </head>
-<body onmousemove="updateEyes(event)">
+<body onmousemove="track(event)" ontouchmove="trackTouch(event)">
 
-    <div class="vignette"></div>
-    <div id="demon-flesh"></div>
+    <div id="noise"></div>
+    <div id="demon-entity"></div>
+    <div id="watcher"></div>
 
-    <div id="ui-wrapper">
+    <div id="manifest">
         <h1>CONTRATO</h1>
-        <div class="clause">EL DEMONIO DEL SECRETO HA SIDO INVOCADO. TUS CONFESIONES NO DEJARÁN ESTA HABITACIÓN.</div>
-        <div class="clause">EL SILENCIO SE PAGA CON SILENCIO.</div>
-        <div class="warning">QUIEN ESCUCHE, MORIRÁ.</div>
-        <p style="font-size: 0.7rem;">¿ENTREGARÁS TU ALMA AL SECRETO?</p>
+        <div class="paragraph">
+            Has despertado al <strong>Demonio del Secreto</strong>. <br>
+            A partir de este segundo, el silencio es tu única protección.
+        </div>
+        <div class="crucial">QUIEN ESCUCHE TU SECRETO, MORIRÁ.</div>
+        <div class="paragraph" style="font-size: 0.6rem;">
+            Aceptas que tu existencia sea registrada y tu privacidad cedida al abismo.
+        </div>
         
-        <div class="btn-container">
-            <button onclick="firmar()">SÍ, ACEPTO SER SU PROPIEDAD</button>
-            <button onmouseover="huye(this)" onclick="firmar()">NO</button>
+        <div class="controls">
+            <button onclick="bond()">SÍ, ACEPTO</button>
+            <button id="no-btn" onmouseover="dodge()" ontouchstart="dodge()">NO</button>
         </div>
     </div>
 
     <script>
-        const demon = document.getElementById('demon-flesh');
-        const body = document.body;
-        const ui = document.getElementById('ui-wrapper');
+        const watcher = document.getElementById('watcher');
+        const demon = document.getElementById('demon-entity');
+        const ui = document.getElementById('manifest');
 
-        // Generar ojos en posiciones aleatorias del "cuerpo" del demonio
-        for(let i=0; i<15; i++) {
-            let eye = document.createElement('div');
-            eye.className = 'eye-socket';
-            eye.innerHTML = '<div class="pupil"></div>';
-            eye.style.left = Math.random() * 80 + 10 + '%';
-            eye.style.top = Math.random() * 80 + 10 + '%';
-            body.appendChild(eye);
+        // El demonio te sigue
+        function track(e) {
+            watcher.style.opacity = "1";
+            watcher.style.left = e.clientX - 50 + 'px';
+            watcher.style.top = e.clientY - 2 + 'px';
         }
 
-        const sockets = document.querySelectorAll('.eye-socket');
-
-        function updateEyes(e) {
-            sockets.forEach(s => {
-                // Los ojos aparecen y desaparecen aleatoriamente
-                s.style.display = Math.random() > 0.95 ? 'block' : (Math.random() > 0.9 ? 'none' : s.style.display);
-                
-                // Las pupilas siguen al mouse ligeramente
-                let pupil = s.querySelector('.pupil');
-                let x = (e.clientX / window.innerWidth) * 5;
-                let y = (e.clientY / window.innerHeight) * 5;
-                pupil.style.transform = `translate(${x}px, ${y}px)`;
-            });
+        function trackTouch(e) {
+            watcher.style.opacity = "1";
+            watcher.style.left = e.touches[0].clientX - 50 + 'px';
+            watcher.style.top = e.touches[0].clientY - 2 + 'px';
         }
 
-        // El botón "NO" se escapa, obligándote a aceptar (Psicología de pérdida de control)
-        function huye(btn) {
-            btn.style.position = 'absolute';
-            btn.style.top = Math.random() * 80 + '%';
+        // El botón NO se escapa (Gaslighting de control)
+        function dodge() {
+            const btn = document.getElementById('no-btn');
+            btn.style.position = 'fixed';
             btn.style.left = Math.random() * 80 + '%';
+            btn.style.top = Math.random() * 80 + '%';
+            btn.innerText = "ES TARDE";
         }
 
-        function firmar() {
-            // El demonio "sonríe" y se retuerce de forma traumática
-            document.querySelectorAll('.eye-socket').forEach(s => s.style.display = 'block');
-            demon.classList.add('agony');
-            body.style.backgroundColor = "white"; // Flash cegador
+        function bond() {
+            // El demonio se retuerce violentamente (Trauma visual)
+            document.body.classList.add('convulsion');
             
             setTimeout(() => {
-                body.style.backgroundColor = "black";
+                document.body.classList.remove('convulsion');
+                document.body.style.backgroundColor = "black";
+                
                 ui.innerHTML = `
-                    <h1 style="color:red; animation: none;">CONTRATO SELLADO</h1>
-                    <p style="color:white; font-weight:bold; font-size:1.2rem;">ERES PROPIEDAD DEL SECRETO.</p>
-                    <p style="color:red; border: 2px solid red; padding: 20px; background: #100;">
-                        TU PRÓXIMA ACTUALIZACIÓN DE CORREO SERÁ ENVIADA A LAS SOMBRAS. EL DEMONIO YA ESTÁ DENTRO.
+                    <h1 style="color:red; animation: panic 0.01s infinite;">CONTRATO SELLADO</h1>
+                    <p style="color:white; font-size:1.1rem; letter-spacing: 2px;">ERES PROPIEDAD DEL SECRETO.</p>
+                    <div style="border: 1px solid #300; padding: 15px; color: red; font-size: 0.8rem; background: #050000;">
+                        CONDICIÓN FINAL:<br>
+                        DEBERÁS MANDAR TU PRÓXIMA ACTUALIZACIÓN DE CORREO.
+                    </div>
+                    <p style="color:#222; font-size:0.6rem; margin-top:20px;">
+                        Él te observará mientras escribes.<br>
+                        Él estará allí cuando cierres los ojos esta noche.
                     </p>
-                    <div style="font-size:0.5rem; color:#333; margin-top:20px;">No mires atrás al cerrar la pestaña.</div>
                 `;
                 
-                // Iniciar un sonido visual de estática (glitch de color)
-                setInterval(() => {
-                    body.style.filter = `hue-rotate(${Math.random()*360}deg)`;
-                }, 50);
-            }, 200);
+                // Vibración del teléfono si es móvil
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 500]);
+            }, 400);
         }
     </script>
 </body>
