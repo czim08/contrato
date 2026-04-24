@@ -2,117 +2,156 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Protocolo de Encriptación: Secreto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrato con el Demonio del Secreto</title>
     <style>
-        body { margin: 0; background-color: #050505; color: #cc0000; font-family: 'Courier New', Courier, monospace; overflow: hidden; }
-        #canvas-container { width: 100vw; height: 100vh; cursor: grab; }
-        .ui-overlay {
-            position: absolute; top: 30px; left: 30px; z-index: 10;
-            pointer-events: none; border-left: 1px solid #cc0000; padding-left: 20px;
+        :root {
+            --blood-red: #8a0303;
+            --devil-black: #0a0a0a;
         }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: var(--devil-black);
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Fondo del Demonio */
+        #demon-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* Representación visual del demonio (SVG o silueta) */
+        .demon-eye {
+            width: 300px;
+            filter: drop-shadow(0 0 15px var(--blood-red));
+            transition: transform 0.3s ease;
+        }
+
+        /* Interfaz del Contrato */
         .contract-box {
-            position: absolute; bottom: 60px; width: 100%; text-align: center;
-            z-index: 10; padding: 25px; background: rgba(0,0,0,0.85);
-            border-top: 1px solid #333;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border: 2px solid var(--blood-red);
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 0 30px rgba(138, 3, 3, 0.5);
         }
-        h1 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 4px; margin: 0; }
-        p { color: #777; font-size: 0.85rem; margin: 5px 0; }
-        .warning { color: #cc0000; font-weight: bold; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+        h1 {
+            color: var(--blood-red);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+        }
+
         button {
-            background: transparent; border: 1px solid #cc0000; color: #cc0000;
-            padding: 12px 25px; cursor: pointer; pointer-events: all;
-            transition: 0.4s; margin-top: 15px; text-transform: uppercase;
-            letter-spacing: 2px; font-weight: bold;
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            padding: 10px 30px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.3s;
         }
-        button:hover { background: #cc0000; color: #000; box-shadow: 0 0 15px #cc0000; }
-        .hidden-msg { color: #fff; font-style: italic; font-size: 0.95rem; }
+
+        button:hover {
+            background: var(--blood-red);
+            border-color: var(--blood-red);
+            box-shadow: 0 0 10px var(--blood-red);
+        }
+
+        /* Animaciones */
+        .twist {
+            animation: twist-anim 0.5s infinite alternate;
+        }
+
+        @keyframes twist-anim {
+            from { transform: rotate(-5deg) scale(1.1); }
+            to { transform: rotate(5deg) scale(1.2) skew(10deg); }
+        }
+
+        .smile {
+            filter: hue-rotate(90deg) brightness(1.5);
+            transform: scale(1.3);
+        }
+
+        .fade-out {
+            opacity: 0;
+            transform: scale(0.5);
+        }
     </style>
 </head>
 <body>
 
-    <div class="ui-overlay">
-        <h1>CONTRATO: DEMONIO DEL SECRETO</h1>
-        <p>> ORIGEN: MICHOACÁN // DESTINO: MONTERREY</p>
-        <p>> SEGURIDAD: NIVEL SSS</p>
-        <p class="warning">ADVERTENCIA: MAKIMA ESTÁ ESCUCHANDO</p>
+    <div id="demon-container">
+        <svg class="demon-eye" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#222" d="M40,-62C53.3,-54.1,66.6,-45.1,75.4,-32.5C84.2,-19.9,88.5,-3.7,85.2,11.3C81.9,26.3,71,40.1,58.8,51.1C46.6,62.1,33.1,70.3,18.4,74.1C3.7,77.9,-12.1,77.3,-26.8,72.1C-41.5,66.9,-55.1,57.1,-64.8,44.1C-74.5,31.1,-80.3,14.9,-78.9,0.8C-77.5,-13.3,-68.9,-25.3,-59,-35.3C-49.1,-45.3,-37.9,-53.3,-25.9,-62C-13.9,-70.7,-1,-80.1,13.4,-77.8C27.8,-75.5,40,-62,40,-62Z" transform="translate(100 100)" />
+            <circle cx="100" cy="80" r="10" fill="red" />
+        </svg>
     </div>
 
-    <div id="canvas-container"></div>
-
-    <div class="contract-box">
-        <div id="text-reveal">
-            <p>¿De quién deberías tener cuidado?</p>
-            <p class="hidden-msg">"Solo de aquel que sabe leer entre líneas."</p>
-            <button onclick="accept()">FIRMAR CONTRATO</button>
+    <div class="contract-box" id="ui">
+        <h1>Demonio del Secreto</h1>
+        <p>
+            "Tus secretos estarán a salvo y nadie los escuchará... <br>
+            <strong>Quien los escuche, morirá.</strong>"
+        </p>
+        <p>¿Aceptas las condiciones del contrato?</p>
+        
+        <div class="buttons">
+            <button onclick="acceptContract()">SÍ</button>
+            <button onclick="rejectContract()">NO</button>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        let scene, camera, renderer, demonObject;
+        const demon = document.querySelector('.demon-eye');
+        const ui = document.getElementById('ui');
 
-        function init() {
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-            // Geometría del "Demonio" (un cristal oscuro y afilado)
-            const geometry = new THREE.OctahedronGeometry(1.8, 0);
-            const material = new THREE.MeshPhongMaterial({ 
-                color: 0x000000, 
-                shininess: 150, 
-                specular: 0xff0000,
-                flatShading: true
-            });
-            demonObject = new THREE.Mesh(geometry, material);
-            scene.add(demonObject);
-
-            // Aura de energía roja (wireframe)
-            const wireGeom = new THREE.OctahedronGeometry(1.9, 0);
-            const wireMat = new THREE.MeshBasicMaterial({ color: 0xcc0000, wireframe: true, transparent: true, opacity: 0.2 });
-            const aura = new THREE.Mesh(wireGeom, wireMat);
-            demonObject.add(aura);
-
-            // Iluminación dramática
-            const redLight = new THREE.PointLight(0xff0000, 1.5, 50);
-            redLight.position.set(5, 5, 5);
-            scene.add(redLight);
-            scene.add(new THREE.AmbientLight(0x111111));
-
-            camera.position.z = 5;
-            animate();
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            demonObject.rotation.y += 0.008;
-            demonObject.rotation.z += 0.003;
-            renderer.render(scene, camera);
-        }
-
-        function accept() {
-            const box = document.getElementById('text-reveal');
-            box.style.opacity = 0;
+        function acceptContract() {
+            // El demonio se retuerce y sonríe (cambio visual)
+            demon.classList.add('twist');
             setTimeout(() => {
-                box.innerHTML = `
-                    <p class='warning'>CONTRATO SELLADO.</p>
-                    <p style="color:#eee">Términos aceptados: Canal protegido a cambio de tu **próxima actualización**.</p>
-                    <p style="color:#555">Makima ha perdido la señal.</p>
-                `;
-                box.style.opacity = 1;
+                demon.classList.add('smile');
+            }, 500);
+            
+            alert("CONTRATO REALIZADO. El precio ha sido fijado.");
+        }
+
+        function rejectContract() {
+            // El demonio desaparece
+            document.getElementById('demon-container').classList.add('fade-out');
+            ui.innerHTML = "<h1>CONTRATO FALLIDO</h1><p>El demonio se ha desvanecido en las sombras.</p>";
+            setTimeout(() => {
+                ui.style.borderColor = "#333";
             }, 500);
         }
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        init();
     </script>
 </body>
 </html>
