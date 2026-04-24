@@ -3,216 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SISTEMA_CORRUPTO</title>
+    <title>SISTEMA_VINCULANTE</title>
     <style>
-        :root {
-            --red: #600000;
-            --deep-black: #000000;
-            --blood: #ff0000;
+        :root { --b: #000; --r: #f00; --g: #111; }
+        * { cursor: none !important; -webkit-tap-highlight-color: transparent; }
+        
+        body, html { 
+            margin: 0; padding: 0; height: 100%; width: 100%; 
+            background: var(--b); color: #444; 
+            font-family: 'Courier New', monospace; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
         }
 
-        * { cursor: none !important; } /* Elimina el cursor para quitar control */
-
-        body, html {
-            margin: 0; padding: 0;
-            width: 100vw; height: 100vh;
-            background-color: var(--deep-black);
-            color: #444;
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            -webkit-touch-callout: none;
-            user-select: none;
+        /* EL DEMONIO: Masa que se expande y contrae como un corazón */
+        #demon {
+            position: absolute; width: 150%; height: 150%;
+            background: radial-gradient(circle, #1a0000 0%, #000 50%);
+            z-index: 1; filter: blur(80px);
+            animation: breathe 0.08s infinite alternate;
         }
 
-        /* EL DEMONIO: Una masa visceral que respira detrás del texto */
-        #demon-entity {
-            position: absolute;
-            width: 120%; height: 120%;
-            background: radial-gradient(circle, #0f0000 0%, #000 60%);
-            z-index: 1;
-            filter: blur(60px);
-            animation: panic 0.1s infinite alternate;
-            opacity: 0.8;
+        @keyframes breathe {
+            from { transform: scale(1); opacity: 0.6; }
+            to { transform: scale(1.1); opacity: 0.9; filter: blur(40px) contrast(3); }
         }
 
-        @keyframes panic {
-            0% { transform: scale(1) translate(0,0); }
-            100% { transform: scale(1.05) translate(3px, -3px); filter: blur(40px) contrast(2); }
+        /* Ojos latentes en la oscuridad */
+        .watcher {
+            position: absolute; width: 2px; height: 2px;
+            background: var(--r); border-radius: 50%;
+            box-shadow: 0 0 10px var(--r); z-index: 2; opacity: 0;
         }
 
-        /* Ojo central que parpadea según el movimiento */
-        #watcher {
-            position: absolute;
-            width: 100px; height: 5px;
-            background: var(--blood);
-            border-radius: 50%;
-            z-index: 2;
-            filter: blur(10px);
-            box-shadow: 0 0 40px var(--blood);
-            opacity: 0;
-            transition: opacity 0.5s;
+        #ui {
+            position: relative; z-index: 10; width: 80%; max-width: 400px;
+            text-align: center; background: rgba(0,0,0,0.95);
+            padding: 40px; border-left: 1px solid #200;
         }
 
-        /* Interfaz del Contrato */
-        #manifest {
-            position: relative;
-            z-index: 10;
-            width: 85%;
-            max-width: 400px;
-            text-align: center;
-            padding: 20px;
-            background: rgba(0,0,0,0.9);
-            border: 1px solid #111;
+        h1 { font-size: 1rem; letter-spacing: 10px; color: #500; margin-bottom: 40px; }
+        
+        .clause { font-size: 0.75rem; line-height: 1.8; margin-bottom: 20px; color: #666; }
+        
+        .warn { color: var(--r); font-weight: bold; animation: glitch 0.2s infinite; }
+
+        @keyframes glitch {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(-2px); text-shadow: 2px 0 blue; }
+            100% { transform: translateX(2px); text-shadow: -2px 0 var(--r); }
         }
 
-        h1 {
-            font-size: 1rem;
-            letter-spacing: 15px;
-            color: var(--red);
-            margin-bottom: 30px;
-            text-transform: uppercase;
+        .btns { display: flex; flex-direction: column; gap: 20px; margin-top: 40px; }
+        
+        button { 
+            background: none; border: 1px solid #222; color: #444; 
+            padding: 15px; letter-spacing: 5px; font-size: 0.7rem;
         }
 
-        .paragraph {
-            font-size: 0.8rem;
-            margin-bottom: 20px;
-            line-height: 1.8;
-            color: #555;
-            transition: color 0.3s;
-        }
-
-        .crucial {
-            color: var(--blood);
-            font-weight: bold;
-            display: block;
-            margin: 20px 0;
-            letter-spacing: 2px;
-        }
-
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 40px;
-        }
-
-        button {
-            background: transparent;
-            border: 1px solid #222;
-            color: #333;
-            padding: 15px;
-            font-family: inherit;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            transition: 0.1s;
-        }
-
-        button:active, button:hover {
-            border-color: var(--blood);
-            color: var(--blood);
-            background: #050000;
-        }
-
-        /* EFECTO PSICOLÓGICO: RETORCERSE */
-        .convulsion {
-            animation: violent 0.05s infinite !important;
-        }
-
-        @keyframes violent {
-            0% { filter: invert(1) contrast(10); transform: translate(5px, 5px); }
-            50% { filter: invert(0) contrast(1); transform: translate(-5px, -5px); }
-            100% { filter: invert(1) contrast(10); transform: translate(0, 0); }
-        }
-
-        /* Pantalla de carga falsa inicial */
-        #noise {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://media.giphy.com/media/oEI9uWUPr9WUM/giphy.gif');
-            opacity: 0.03;
-            z-index: 1000;
-            pointer-events: none;
+        /* EFECTO DE RETORCIMIENTO TRAUMÁTICO */
+        .trauma { animation: flash 0.04s infinite !important; }
+        @keyframes flash {
+            0% { background: #fff; filter: invert(1); }
+            50% { background: #000; filter: invert(0); transform: scale(1.5); }
+            100% { background: #500; }
         }
     </style>
 </head>
-<body onmousemove="track(event)" ontouchmove="trackTouch(event)">
+<body onmousemove="track(event)" ontouchmove="track(event)">
 
-    <div id="noise"></div>
-    <div id="demon-entity"></div>
-    <div id="watcher"></div>
-
-    <div id="manifest">
-        <h1>CONTRATO</h1>
-        <div class="paragraph">
-            Has despertado al <strong>Demonio del Secreto</strong>. <br>
-            A partir de este segundo, el silencio es tu única protección.
-        </div>
-        <div class="crucial">QUIEN ESCUCHE TU SECRETO, MORIRÁ.</div>
-        <div class="paragraph" style="font-size: 0.6rem;">
-            Aceptas que tu existencia sea registrada y tu privacidad cedida al abismo.
-        </div>
-        
-        <div class="controls">
-            <button onclick="bond()">SÍ, ACEPTO</button>
-            <button id="no-btn" onmouseover="dodge()" ontouchstart="dodge()">NO</button>
-        </div>
+<div id="demon"></div>
+<div id="ui">
+    <h1>CONTRATO</h1>
+    <div class="clause">El <b>Demonio del Secreto</b> ha tomado tu ubicación. Tus secretos ahora le pertenecen.</div>
+    <div class="clause warn">QUIEN LOS ESCUCHE MORIRÁ.</div>
+    <div class="clause" style="font-size:0.6rem">No cierres los ojos. El silencio es el hambre del demonio.</div>
+    
+    <div class="btns">
+        <button onclick="pact()">SÍ, ACEPTO EL VÍNCULO</button>
+        <button id="no" onmouseover="run()">NO</button>
     </div>
+</div>
 
-    <script>
-        const watcher = document.getElementById('watcher');
-        const demon = document.getElementById('demon-entity');
-        const ui = document.getElementById('manifest');
+<script>
+    // Generar puntos de mirada
+    for(let i=0; i<30; i++) {
+        let e = document.createElement('div');
+        e.className = 'watcher';
+        e.style.left = Math.random()*100+'%';
+        e.style.top = Math.random()*100+'%';
+        document.body.appendChild(e);
+    }
 
-        // El demonio te sigue
-        function track(e) {
-            watcher.style.opacity = "1";
-            watcher.style.left = e.clientX - 50 + 'px';
-            watcher.style.top = e.clientY - 2 + 'px';
-        }
+    function track(e) {
+        let x = e.clientX || e.touches[0].clientX;
+        let y = e.clientY || e.touches[0].clientY;
+        document.querySelectorAll('.watcher').forEach(w => {
+            w.style.opacity = Math.random() > 0.98 ? "1" : "0";
+            w.style.transform = `translate(${(x/50)}px, ${(y/50)}px)`;
+        });
+    }
 
-        function trackTouch(e) {
-            watcher.style.opacity = "1";
-            watcher.style.left = e.touches[0].clientX - 50 + 'px';
-            watcher.style.top = e.touches[0].clientY - 2 + 'px';
-        }
+    function run() {
+        let btn = document.getElementById('no');
+        btn.style.position = 'fixed';
+        btn.style.left = Math.random()*80+'%';
+        btn.style.top = Math.random()*80+'%';
+        btn.innerHTML = "EL MIEDO ES REAL";
+    }
 
-        // El botón NO se escapa (Gaslighting de control)
-        function dodge() {
-            const btn = document.getElementById('no-btn');
-            btn.style.position = 'fixed';
-            btn.style.left = Math.random() * 80 + '%';
-            btn.style.top = Math.random() * 80 + '%';
-            btn.innerText = "ES TARDE";
-        }
+    function pact() {
+        document.body.classList.add('trauma');
+        if(navigator.vibrate) navigator.vibrate([50, 50, 50, 50, 1000]);
 
-        function bond() {
-            // El demonio se retuerce violentamente (Trauma visual)
-            document.body.classList.add('convulsion');
+        setTimeout(() => {
+            document.body.classList.remove('trauma');
+            document.body.style.background = "#000";
+            document.getElementById('ui').innerHTML = `
+                <h1 style="color:red">CONTRATO SELLADO</h1>
+                <p style="color:white; font-size:0.9rem">AHORA ERES PROPIEDAD DEL SECRETO.</p>
+                <div style="border:1px solid red; padding:20px; color:red; background:#100; font-size:0.7rem">
+                    PAGO: DEBERÁS MANDAR TU PRÓXIMA ACTUALIZACIÓN DE CORREO.<br><br>
+                    ÉL TE OBSERVARÁ MIENTRAS LO HACES.
+                </div>
+                <p style="color:#333; font-size:0.5rem; margin-top:30px">
+                    Sugerencia: No mires debajo de tu cama al irte a dormir.<br>
+                    Tu sombra parece pesar más ahora, ¿verdad?
+                </p>
+            `;
             
-            setTimeout(() => {
-                document.body.classList.remove('convulsion');
-                document.body.style.backgroundColor = "black";
-                
-                ui.innerHTML = `
-                    <h1 style="color:red; animation: panic 0.01s infinite;">CONTRATO SELLADO</h1>
-                    <p style="color:white; font-size:1.1rem; letter-spacing: 2px;">ERES PROPIEDAD DEL SECRETO.</p>
-                    <div style="border: 1px solid #300; padding: 15px; color: red; font-size: 0.8rem; background: #050000;">
-                        CONDICIÓN FINAL:<br>
-                        DEBERÁS MANDAR TU PRÓXIMA ACTUALIZACIÓN DE CORREO.
-                    </div>
-                    <p style="color:#222; font-size:0.6rem; margin-top:20px;">
-                        Él te observará mientras escribes.<br>
-                        Él estará allí cuando cierres los ojos esta noche.
-                    </p>
-                `;
-                
-                // Vibración del teléfono si es móvil
-                if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 500]);
-            }, 400);
-        }
-    </script>
+            // Sonido de sistema falso (Inseguridad psicológica)
+            console.warn("Vínculo establecido. Monitorización de retina activa.");
+            
+            // Programar un susto visual para después (Efecto residual)
+            setInterval(() => {
+                document.body.style.filter = "invert(1)";
+                setTimeout(() => document.body.style.filter = "none", 30);
+            }, 10000);
+        }, 600);
+    }
+</script>
 </body>
 </html>
