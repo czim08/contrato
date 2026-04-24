@@ -3,195 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CONTRATO_VITAL_NIVEL_4</title>
+    <title>SISTEMA CORRUPTO</title>
     <style>
-        :root { --blood: #800000; --shadow: #050000; }
+        body, html { 
+            background: #000; color: #0f0; 
+            font-family: 'Courier New', Courier, monospace; 
+            margin: 0; padding: 0; overflow: hidden;
+            width: 100%; height: 100%;
+        }
+
+        #terminal {
+            padding: 20px; font-size: 12px; line-height: 1.5;
+            height: 100%; overflow: hidden;
+        }
+
+        .red { color: #f00; text-shadow: 0 0 5px #f00; }
         
-        * { cursor: none !important; -webkit-tap-highlight-color: transparent; }
-
-        body, html {
-            margin: 0; padding: 0;
-            width: 100vw; height: 100vh;
-            background-color: var(--shadow);
-            color: #888;
-            font-family: 'Courier New', monospace;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* Efecto de parpadeo de realidad */
+        .glitch {
+            animation: glitch-anim 0.2s infinite;
         }
 
-        /* Glitch de fondo */
-        .glitch-overlay {
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            20% { transform: translate(-5px, 5px); filter: hue-rotate(90deg); }
+            40% { transform: translate(5px, -5px); }
+            60% { transform: translate(-5px, -2px); filter: invert(1); }
+            100% { transform: translate(0); }
+        }
+
+        #pact-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
-            opacity: 0.1; pointer-events: none; z-index: 100;
+            background: #000; display: none; z-index: 999;
+            flex-direction: column; justify-content: center; align-items: center;
         }
 
-        #demon-background {
-            position: absolute; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 1; filter: blur(5px);
+        .blood-text {
+            font-size: 2rem; color: #600; text-align: center;
+            font-weight: bold; letter-spacing: -2px;
         }
 
-        .demon-body {
-            width: 120vh; height: 120vh;
-            background: radial-gradient(circle, #100 0%, #000 70%);
-            border-radius: 40% 60% 30% 70%;
-            animation: breathe 4s infinite ease-in-out;
+        .dark-eye {
+            width: 100px; height: 5px; background: #f00;
+            box-shadow: 0 0 30px #f00; margin: 20px;
+            border-radius: 50%; animation: stare 0.1s infinite alternate;
         }
 
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-
-        .eye {
-            position: absolute; background: #f00;
-            width: 40px; height: 2px;
-            box-shadow: 0 0 20px #f00;
-            animation: blink 0.2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(5); }
-        }
-
-        #contract-box {
-            position: relative; z-index: 10;
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid #400;
-            padding: 40px; text-align: center;
-            max-width: 400px; transition: all 0.5s;
-        }
-
-        .warning { color: #f00; font-size: 1.2rem; text-shadow: 0 0 10px #f00; }
-
-        button {
-            background: transparent; color: #444; border: 1px solid #444;
-            padding: 15px 30px; margin: 10px; font-family: inherit;
-            transition: 0.3s;
-        }
-
-        button:hover { background: #200; color: #f00; border-color: #f00; }
-
-        /* Pantalla de susto */
-        #scare {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 999; display: none;
-            justify-content: center; align-items: center;
-        }
-
-        .convulsion { animation: shake 0.05s infinite; filter: invert(1) contrast(5); }
-
-        @keyframes shake {
-            0% { transform: translate(5px, 5px); }
-            50% { transform: translate(-5px, -5px); }
-            100% { transform: translate(0, 0); }
+        @keyframes stare {
+            from { transform: scaleX(1); }
+            to { transform: scaleX(1.5) scaleY(2); }
         }
     </style>
 </head>
-<body onclick="startAudio()">
+<body onclick="iniciarSecuencia()">
 
-    <div class="glitch-overlay"></div>
-    
-    <div id="demon-background">
-        <div class="demon-body" id="demon">
-            <div class="eye" style="top:30%; left:40%"></div>
-            <div class="eye" style="top:35%; left:55%"></div>
-            <div class="eye" style="top:50%; left:30%"></div>
-            <div class="eye" style="top:55%; left:60%"></div>
-            <div class="eye" style="top:70%; left:45%"></div>
-        </div>
+    <div id="terminal">
+        > Iniciando protocolo de enlace...<br>
+        > Accediendo a metadatos del dispositivo... <span id="status">[OK]</span><br>
+        <div id="logs"></div>
     </div>
 
-    <div id="contract-box">
-        <h1 id="title">CONTRATO DE SANGRE</h1>
-        <p>¿Ofreces tu audición a cambio de que tus secretos jamás sean revelados?</p>
-        <p class="warning">EL DEMONIO ESTÁ HAMBRIENTO.</p>
-        <div id="ui">
-            <button onclick="acceptPact()">ACEPTO EL SACRIFICIO</button>
-            <button id="no-btn" onmouseover="runAway()">RETROCEDER</button>
-        </div>
+    <div id="pact-overlay">
+        <div class="dark-eye"></div>
+        <div class="blood-text" id="final-msg">¿ESCUCHAS LOS GRITOS EN EL CÓDIGO?</div>
+        <div class="dark-eye"></div>
     </div>
 
-    <div id="scare">
-        <h1 style="color:white; font-size: 5vw;">TE ESTOY MIRANDO</h1>
-    </div>
-
-    <audio id="ambient" loop>
-        <source src="https://www.soundjay.com/misc/sounds/heartbeat-01a.mp3" type="audio/mpeg">
+    <audio id="static" loop>
+        <source src="https://www.soundjay.com/communication/sounds/radio-static-01.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        const ambient = document.getElementById('ambient');
-        let audioStarted = false;
+        const logs = document.getElementById('logs');
+        const terminal = document.getElementById('terminal');
+        const overlay = document.getElementById('pact-overlay');
+        let i = 0;
 
-        function startAudio() {
-            if(!audioStarted) {
-                ambient.play();
-                ambient.volume = 0.5;
-                audioStarted = true;
+        const frases = [
+            "> Localizando coordenadas GPS...",
+            "> Extrayendo lista de contactos...",
+            "> Accediendo a galería de fotos (0%... 45%... 99%)",
+            "> <span class='red'>ERROR: ENTIDAD DETECTADA EN LA RED</span>",
+            "> Reconfigurando contrato vital...",
+            "> El Demonio de la Oscuridad te ha encontrado.",
+            "> No cierres los ojos.",
+            "> No mires atrás.",
+            "> Él está en el reflejo de tu pantalla."
+        ];
+
+        function iniciarSecuencia() {
+            document.getElementById('static').play();
+            escribirLogs();
+        }
+
+        function escribirLogs() {
+            if (i < frases.length) {
+                logs.innerHTML += frases[i] + "<br>";
+                i++;
+                setTimeout(escribirLogs, 800);
+                if(navigator.vibrate) navigator.vibrate(20);
+            } else {
+                setTimeout(triggerPact, 1000);
             }
         }
 
-        function runAway() {
-            const btn = document.getElementById('no-btn');
-            btn.style.position = 'fixed';
-            btn.style.left = Math.random() * 80 + 'vw';
-            btn.style.top = Math.random() * 80 + 'vh';
-            btn.innerText = "NO HAY SALIDA";
-            if(navigator.vibrate) navigator.vibrate(50);
-        }
-
-        function acceptPact() {
-            // Fase 1: Silencio y tensión
-            document.getElementById('ui').style.display = 'none';
-            document.getElementById('title').innerText = "ESPERA...";
+        function triggerPact() {
+            terminal.classList.add('glitch');
+            if(navigator.vibrate) navigator.vibrate([1000, 500, 2000]);
             
             setTimeout(() => {
-                // Fase 2: El Jumpscare
-                if(navigator.vibrate) navigator.vibrate([500, 100, 500, 100, 1000]);
-                document.body.classList.add('convulsion');
-                document.getElementById('scare').style.display = 'flex';
+                terminal.style.display = 'none';
+                overlay.style.display = 'flex';
                 
-                // Audio de choque
-                const scream = new Audio('https://www.soundjay.com/communication/sounds/radio-static-05.mp3');
-                scream.play();
+                // CAMBIO PSICOLÓGICO: Hacer que el texto cambie rápido
+                const msgs = ["DAME TUS OJOS", "EL CONTRATO ES ETERNO", "MÍRAME", "MÍRAME", "MÍRAME"];
+                let mIdx = 0;
+                setInterval(() => {
+                    document.getElementById('final-msg').innerText = msgs[mIdx % msgs.length];
+                    mIdx++;
+                    document.body.style.backgroundColor = (mIdx % 2 == 0) ? "#000" : "#100";
+                }, 100);
 
-                setTimeout(() => {
-                    document.body.classList.remove('convulsion');
-                    document.getElementById('scare').innerHTML = `
-                        <div style="text-align:center; color:red; padding:20px;">
-                            <h2 style="font-size:0.8rem;">CONTRATO ESTABLECIDO.</h2>
-                            <p>He accedido a tu cámara frontal para verificar tu identidad...</p>
-                            <div style="width:200px; height:150px; background:#111; margin: 20px auto; border:1px solid #333; display:flex; align-items:center; justify-content:center; overflow:hidden;">
-                                <span style="color:#333; font-size:0.5rem;">[ ERROR: SEÑAL DE CÁMARA INTERRUPTIDA POR ENTIDAD ]</span>
-                            </div>
-                            <p style="font-size:0.6rem; color:#444;">Tu deuda se cobrará en sueños.</p>
-                        </div>
-                    `;
-                    document.getElementById('scare').style.background = "black";
-                    
-                    // Efecto final: la pantalla parpadea cada cierto tiempo
-                    setInterval(() => {
-                        document.body.style.opacity = Math.random() > 0.9 ? "0" : "1";
-                    }, 100);
-                }, 1500);
-            }, 2000);
+            }, 1000);
         }
-
-        // Seguimiento de ojos más agresivo
-        document.addEventListener('mousemove', (e) => {
-            const eyes = document.querySelectorAll('.eye');
-            eyes.forEach(eye => {
-                const rect = eye.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / 30;
-                const y = (e.clientY - rect.top) / 30;
-                eye.style.transform = `translate(${x}px, ${y}px)`;
-            });
-        });
     </script>
 </body>
 </html>
