@@ -3,128 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SISTEMA CORRUPTO</title>
+    <title>CONTRATO_VITAL</title>
     <style>
-        body, html { 
-            background: #000; color: #0f0; 
-            font-family: 'Courier New', Courier, monospace; 
-            margin: 0; padding: 0; overflow: hidden;
-            width: 100%; height: 100%;
-        }
-
-        #terminal {
-            padding: 20px; font-size: 12px; line-height: 1.5;
-            height: 100%; overflow: hidden;
-        }
-
-        .red { color: #f00; text-shadow: 0 0 5px #f00; }
+        :root { --blood: #ff0000; --shadow: #000000; }
         
-        /* Efecto de parpadeo de realidad */
-        .glitch {
-            animation: glitch-anim 0.2s infinite;
+        * { cursor: none !important; -webkit-tap-highlight-color: transparent; }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100vw; height: 100vh;
+            background-color: var(--shadow);
+            color: #ccc;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        @keyframes glitch-anim {
-            0% { transform: translate(0); }
-            20% { transform: translate(-5px, 5px); filter: hue-rotate(90deg); }
-            40% { transform: translate(5px, -5px); }
-            60% { transform: translate(-5px, -2px); filter: invert(1); }
-            100% { transform: translate(0); }
+        /* EL DEMONIO: Ahora es una silueta masiva y negra que domina el fondo */
+        #demon-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
         }
 
-        #pact-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; display: none; z-index: 999;
-            flex-direction: column; justify-content: center; align-items: center;
+        .demon-body {
+            width: 90vh;
+            height: 90vh;
+            background: #050000;
+            filter: blur(20px) contrast(5); /* Esto hace que se vea como tinta negra profunda */
+            border-radius: 30% 70% 50% 50% / 50% 30% 70% 50%;
+            box-shadow: 0 0 100px #200;
+            animation: move 0.1s infinite alternate;
+            position: relative;
         }
 
-        .blood-text {
-            font-size: 2rem; color: #600; text-align: center;
-            font-weight: bold; letter-spacing: -2px;
+        @keyframes move {
+            from { transform: scale(1) rotate(0deg); border-radius: 30% 70% 50% 50%; }
+            to { transform: scale(1.02) rotate(1deg); border-radius: 40% 60% 40% 60%; }
         }
 
-        .dark-eye {
-            width: 100px; height: 5px; background: #f00;
-            box-shadow: 0 0 30px #f00; margin: 20px;
-            border-radius: 50%; animation: stare 0.1s infinite alternate;
+        /* Ojos rojos múltiples: Estilo Chainsaw Man */
+        .eye {
+            position: absolute;
+            background: var(--blood);
+            width: 30px; height: 6px;
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--blood);
+            opacity: 0.9;
         }
 
-        @keyframes stare {
-            from { transform: scaleX(1); }
-            to { transform: scaleX(1.5) scaleY(2); }
+        /* La caja de texto: Ahora más cruda */
+        #contract-box {
+            position: relative;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #300;
+            padding: 30px;
+            text-align: center;
+            max-width: 350px;
+            box-shadow: 0 0 50px #000;
         }
+
+        h1 { color: #800; letter-spacing: 5px; font-size: 1.2rem; margin-top: 0; }
+        
+        .warning { color: var(--blood); font-weight: bold; animation: pulse-text 0.5s infinite; }
+        
+        @keyframes pulse-text {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .btn-container {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        button {
+            background: #000;
+            color: #666;
+            border: 1px solid #222;
+            padding: 15px;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* EFECTO DE RETORCERSE (TRAUMA PSICOLÓGICO) */
+        .convulsion {
+            animation: violent-shake 0.05s infinite !important;
+            filter: invert(1) contrast(10) !important;
+        }
+
+        @keyframes violent-shake {
+            0% { transform: translate(10px, -10px) scale(1.2); }
+            50% { transform: translate(-10px, 10px) scale(1.5); }
+            100% { transform: translate(0, 0) scale(1.3); }
+        }
+
     </style>
 </head>
-<body onclick="iniciarSecuencia()">
+<body onmousemove="track(event)" ontouchmove="track(event)">
 
-    <div id="terminal">
-        > Iniciando protocolo de enlace...<br>
-        > Accediendo a metadatos del dispositivo... <span id="status">[OK]</span><br>
-        <div id="logs"></div>
+    <div id="demon-background">
+        <div class="demon-body" id="demon">
+            <div class="eye" style="top:20%; left:30%;"></div>
+            <div class="eye" style="top:15%; left:60%;"></div>
+            <div class="eye" style="top:45%; left:40%;"></div>
+            <div class="eye" style="top:70%; left:25%;"></div>
+            <div class="eye" style="top:65%; left:65%;"></div>
+            <div class="eye" style="top:40%; left:75%;"></div>
+        </div>
     </div>
 
-    <div id="pact-overlay">
-        <div class="dark-eye"></div>
-        <div class="blood-text" id="final-msg">¿ESCUCHAS LOS GRITOS EN EL CÓDIGO?</div>
-        <div class="dark-eye"></div>
+    <div id="contract-box">
+        <h1>DEMONIO DEL SECRETO</h1>
+        <p>Tus secretos estarán a salvo y nadie los escuchará...</p>
+        <p class="warning">QUIEN LOS ESCUCHE MORIRÁ.</p>
+        <p style="font-size: 0.7rem; color: #444;">¿Aceptas el vínculo eterno?</p>
+        
+        <div class="btn-container">
+            <button onclick="pact()">SÍ, ACEPTO</button>
+            <button id="no-btn" onmouseover="dodge()">NO</button>
+        </div>
     </div>
-
-    <audio id="static" loop>
-        <source src="https://www.soundjay.com/communication/sounds/radio-static-01.mp3" type="audio/mpeg">
-    </audio>
 
     <script>
-        const logs = document.getElementById('logs');
-        const terminal = document.getElementById('terminal');
-        const overlay = document.getElementById('pact-overlay');
-        let i = 0;
+        const demon = document.getElementById('demon');
+        const box = document.getElementById('contract-box');
 
-        const frases = [
-            "> Localizando coordenadas GPS...",
-            "> Extrayendo lista de contactos...",
-            "> Accediendo a galería de fotos (0%... 45%... 99%)",
-            "> <span class='red'>ERROR: ENTIDAD DETECTADA EN LA RED</span>",
-            "> Reconfigurando contrato vital...",
-            "> El Demonio de la Oscuridad te ha encontrado.",
-            "> No cierres los ojos.",
-            "> No mires atrás.",
-            "> Él está en el reflejo de tu pantalla."
-        ];
-
-        function iniciarSecuencia() {
-            document.getElementById('static').play();
-            escribirLogs();
+        // Los ojos del demonio vibran ligeramente con el tacto/mouse
+        function track(e) {
+            const x = e.clientX || e.touches[0].clientX;
+            const y = e.clientY || e.touches[0].clientY;
+            demon.style.transform = `translate(${(x - window.innerWidth/2)/50}px, ${(y - window.innerHeight/2)/50}px)`;
         }
 
-        function escribirLogs() {
-            if (i < frases.length) {
-                logs.innerHTML += frases[i] + "<br>";
-                i++;
-                setTimeout(escribirLogs, 800);
-                if(navigator.vibrate) navigator.vibrate(20);
-            } else {
-                setTimeout(triggerPact, 1000);
-            }
+        // El botón NO es una ilusión
+        function dodge() {
+            const btn = document.getElementById('no-btn');
+            btn.style.position = 'fixed';
+            btn.style.left = Math.random() * 80 + '%';
+            btn.style.top = Math.random() * 80 + '%';
+            btn.innerText = "NO PUEDES";
+            if(navigator.vibrate) navigator.vibrate(20); // Pequeño tic nervioso al intentar darle a NO
         }
 
-        function triggerPact() {
-            terminal.classList.add('glitch');
-            if(navigator.vibrate) navigator.vibrate([1000, 500, 2000]);
+        function pact() {
+            // EFECTO FÍSICO: Vibración intensa
+            if(navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 1000]);
+
+            // EFECTO VISUAL: El demonio se retuerce violentamente
+            document.body.classList.add('convulsion');
             
             setTimeout(() => {
-                terminal.style.display = 'none';
-                overlay.style.display = 'flex';
+                document.body.classList.remove('convulsion');
+                document.body.style.background = "#000";
                 
-                // CAMBIO PSICOLÓGICO: Hacer que el texto cambie rápido
-                const msgs = ["DAME TUS OJOS", "EL CONTRATO ES ETERNO", "MÍRAME", "MÍRAME", "MÍRAME"];
-                let mIdx = 0;
-                setInterval(() => {
-                    document.getElementById('final-msg').innerText = msgs[mIdx % msgs.length];
-                    mIdx++;
-                    document.body.style.backgroundColor = (mIdx % 2 == 0) ? "#000" : "#100";
-                }, 100);
+                box.innerHTML = `
+                    <h1 style="color:red; animation: violent-shake 0.1s infinite;">PROPIEDAD RECLAMADA</h1>
+                    <p style="color:white; font-size:1rem;">AHORA ERES PROPIEDAD DEL SECRETO.</p>
+                    <div style="border: 2px solid red; padding: 15px; color: red; background: #100; font-size: 0.8rem;">
+                        A CAMBIO, TENDRÁS QUE MANDAR TU PRÓXIMA ACTUALIZACIÓN DE CORREO.
+                    </div>
+                    <p style="color:#222; font-size:0.6rem; margin-top:20px;">
+                        El demonio te observará mientras duermes para asegurarse de que guardas el silencio.
+                    </p>
+                `;
 
-            }, 1000);
+                // Inseguridad persistente: Vibrar y parpadear cada 20 segundos
+                setInterval(() => {
+                    if(navigator.vibrate) navigator.vibrate(500);
+                    document.body.style.filter = "invert(1)";
+                    setTimeout(() => document.body.style.filter = "none", 50);
+                }, 20000);
+
+            }, 600);
         }
     </script>
 </body>
